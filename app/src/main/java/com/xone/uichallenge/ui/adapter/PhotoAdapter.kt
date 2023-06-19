@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.xone.uichallenge.R
 import com.xone.uichallenge.models.ModelClass
+import com.xone.uichallenge.models.PhotoModel
 
 class PhotoAdapter(
-    private val photos: List<List<ModelClass.ModelClassItem>>,
+    private val photos: List<PhotoModel>,
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,11 +56,11 @@ class PhotoAdapter(
 
     override fun getItemCount() = photos.size
 
-    override fun getItemViewType(position: Int) = position % 4
+    override fun getItemViewType(position: Int) = photos[position].viewType
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val list = photos[position]
-        (holder as Bind).onBind(list)
+        val item = photos[position]
+        (holder as Bind).onBind(item)
     }
 
     class PhotoViewHolderOne constructor(itemView: View) : RecyclerView.ViewHolder(itemView), Bind {
@@ -67,19 +68,19 @@ class PhotoAdapter(
         private val secondPhoto = itemView.findViewById<AppCompatImageView>(R.id.secondImage)
         private val thirdPhoto = itemView.findViewById<AppCompatImageView>(R.id.thirdImage)
 
-        override fun onBind(list: List<ModelClass.ModelClassItem>) {
+        override fun onBind(photo: PhotoModel) {
             Glide.with(firstPhoto.context)
-                .load(list[0].urls.regular)
+                .load(photo.img1)
 //                .override(250, 250)
                 .into(firstPhoto)
 
             Glide.with(secondPhoto.context)
-                .load(list[1].urls.regular)
+                .load(photo.img2)
                 //                .override(250, 250)
                 .into(secondPhoto)
 
             Glide.with(thirdPhoto.context)
-                .load(list[2].urls.regular)
+                .load(photo.img3)
                 //                .override(250, 250)
                 .into(thirdPhoto)
         }
@@ -89,20 +90,19 @@ class PhotoAdapter(
         private val firstPhoto = itemView.findViewById<AppCompatImageView>(R.id.firstImage)
         private val secondPhoto = itemView.findViewById<AppCompatImageView>(R.id.secondImage)
         private val thirdPhoto = itemView.findViewById<AppCompatImageView>(R.id.thirdImage)
-
-        override fun onBind(list: List<ModelClass.ModelClassItem>) {
+        override fun onBind(photo: PhotoModel) {
             Glide.with(firstPhoto.context)
-                .load(list[0].urls.regular)
-                //                .override(250, 250)
+                .load(photo.img1)
+//                .override(250, 250)
                 .into(firstPhoto)
 
             Glide.with(secondPhoto.context)
-                .load(list[1].urls.regular)
+                .load(photo.img2)
                 //                .override(250, 250)
                 .into(secondPhoto)
 
             Glide.with(thirdPhoto.context)
-                .load(list[2].urls.regular)
+                .load(photo.img3)
                 //                .override(250, 250)
                 .into(thirdPhoto)
         }
@@ -114,20 +114,19 @@ class PhotoAdapter(
         private val secondPhoto = itemView.findViewById<AppCompatImageView>(R.id.secondImage)
         private val thirdPhoto = itemView.findViewById<AppCompatImageView>(R.id.thirdImage)
 
-
-        override fun onBind(list: List<ModelClass.ModelClassItem>) {
+        override fun onBind(photo: PhotoModel) {
             Glide.with(firstPhoto.context)
-                .load(list[0].urls.regular)
-                //                .override(250, 250)
+                .load(photo.img1)
+//                .override(250, 250)
                 .into(firstPhoto)
 
             Glide.with(secondPhoto.context)
-                .load(list[1].urls.regular)
+                .load(photo.img2)
                 //                .override(250, 250)
                 .into(secondPhoto)
 
             Glide.with(thirdPhoto.context)
-                .load(list[2].urls.regular)
+                .load(photo.img3)
                 //                .override(250, 250)
                 .into(thirdPhoto)
         }
@@ -141,6 +140,6 @@ class PhotoAdapter(
     }
 
     interface Bind {
-        fun onBind(list: List<ModelClass.ModelClassItem>)
+        fun onBind(photo: PhotoModel)
     }
 }

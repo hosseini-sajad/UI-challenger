@@ -45,7 +45,6 @@ class ModelClass : ArrayList<ModelClass.ModelClassItem>(){
         val user: User,
         @SerializedName("width")
         val width: Int,
-        var viewType: Int = 1
     ) {
         @Keep
         data class Links(

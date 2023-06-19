@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xone.uichallenge.databinding.FragmentHomeBinding
 import com.xone.uichallenge.models.ModelClass
+import com.xone.uichallenge.models.PhotoModel
 import com.xone.uichallenge.ui.adapter.PhotoAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +44,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupImdbRecyclerView(
-        photos: List<List<ModelClass.ModelClassItem>>,
+        photos: List<PhotoModel>,
         recyclerView: RecyclerView,
     ) {
         recyclerView.apply {

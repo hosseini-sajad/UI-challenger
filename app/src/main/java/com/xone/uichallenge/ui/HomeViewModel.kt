@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.xone.uichallenge.models.ModelClass
 import com.xone.uichallenge.models.ModelClass.ModelClassItem
 import com.xone.uichallenge.models.Photo
+import com.xone.uichallenge.models.PhotoModel
 import com.xone.uichallenge.source.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,10 +21,10 @@ class HomeViewModel @Inject constructor(private val apiService: ApiService) : Vi
 
     private var counter = 0
 
-    private val mutablePhotoObservable: MutableLiveData<List<List<ModelClassItem>>> by lazy {
-        MutableLiveData<List<List<ModelClassItem>>>()
+    private val mutablePhotoObservable: MutableLiveData<List<PhotoModel>> by lazy {
+        MutableLiveData<List<PhotoModel>>()
     }
-    val photoObservable: LiveData<List<List<ModelClassItem>>> get() = mutablePhotoObservable
+    val photoObservable: LiveData<List<PhotoModel>> get() = mutablePhotoObservable
 
     fun getPhotos() {
         viewModelScope.launch {
@@ -31,27 +32,30 @@ class HomeViewModel @Inject constructor(private val apiService: ApiService) : Vi
         }
     }
 
-    private suspend fun fetchPhotos(): List<List<ModelClassItem>> = withContext(Dispatchers.IO) {
+    private suspend fun fetchPhotos(): List<PhotoModel> = withContext(Dispatchers.IO) {
         counter = 0
 
-        val response: List<List<ModelClassItem>>
+        val response: List<PhotoModel>
         try {
-            response = apiService.getPhotos().chunked(3).onEach { modelClassItems ->
-                modelClassItems.onEach { modelClass ->
-                    when (counter % 4) {
-                        0 -> modelClass.viewType = 0
-                        1 -> modelClass.viewType = 1
-                        2 -> modelClass.viewType = 2
-                        3 -> modelClass.viewType = 3
+            val photos = arrayListOf<PhotoModel>()
+            val x = apiService.getPhotos().chunked(3)
+                x.map {
+                    val photo = when (counter % 4) {
+                        0 -> PhotoModel(it[0].urls.regular, it[1].urls.regular, it[2].urls.regular, viewType = 0)
+                        1 -> PhotoModel(it[0].urls.regular, it[1].urls.regular, it[2].urls.regular, viewType = 1)
+                        2 -> PhotoModel(it[0].urls.regular, it[1].urls.regular, it[2].urls.regular, viewType = 2)
+                        3 -> PhotoModel(it[0].urls.regular, it[1].urls.regular, it[2].urls.regular, viewType = 3)
+                        else -> PhotoModel(it[0].urls.regular, it[1].urls.regular, it[2].urls.regular, viewType = 0)
                     }
+
+                photos.add(photo)
+                    counter++
                 }
-                counter++
-            }
-            return@withContext response
+            return@withContext photos
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        return@withContext listOf<List<ModelClassItem>>()
+        return@withContext listOf<PhotoModel>()
     }
 }
